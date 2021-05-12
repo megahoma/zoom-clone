@@ -10,7 +10,7 @@ myVideo.muted = true
 navigator.mediaDevices
   .getUserMedia({
     video: true,
-    audio: true,
+    audio: false,
   })
   .then((stream) => {
     addVideoStream(myVideo, stream)
@@ -22,7 +22,7 @@ navigator.mediaDevices
 
     socket.on('user-connected', (userId) => {
       console.log('user-connected', userId)
-      connectToNewUser(userId, stream)
+      setTimeout(connectToNewUser, 2500, userId, stream)
     })
   })
 
@@ -45,12 +45,13 @@ function connectToNewUser(userId, stream) {
   })
 }
 
-function addVideoStream(video, stream) {
-  console.log('addVideoStream')
+function addVideoStream(content, stream) {
+  console.log('addVideoStream', content, stream)
 
-  video.srcObject = stream
-  video.addEventListener('loadedmetadata', () => {
-    video.play()
+  content.srcObject = stream
+  content.addEventListener('loadedmetadata', () => {
+    console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaa')
+    content.play()
   })
-  videoGrid.append(video)
+  videoGrid.append(content)
 }
