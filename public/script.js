@@ -16,13 +16,18 @@ navigator.mediaDevices
     addVideoStream(myVideo, stream)
 
     myPeer.on('call', (call) => {
-      console.log('call-answer')
       call.answer(stream)
+      /*const video = document.createElement('video')
+      call.on('stream', (userVideoStream) => {
+        addVideoStream(video, userVideoStream)
+      })*/
     })
 
     socket.on('user-connected', (userId) => {
       console.log('user-connected', userId)
-      setTimeout(connectToNewUser, 2500, userId, stream)
+      setTimeout(() => {
+        connectToNewUser(userId, stream)
+      }, 2500)
     })
   })
 
@@ -34,14 +39,10 @@ function connectToNewUser(userId, stream) {
   const call = myPeer.call(userId, stream)
   const video = document.createElement('video')
 
-  console.log('connetToNewUser')
+  console.log('connetToNewUser', stream)
   call.on('stream', (userVideoStream) => {
     console.log('call-stream', userId)
     addVideoStream(video, userVideoStream)
-  })
-
-  call.on('close', () => {
-    video.remove()
   })
 }
 
@@ -50,7 +51,6 @@ function addVideoStream(content, stream) {
 
   content.srcObject = stream
   content.addEventListener('loadedmetadata', () => {
-    console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaa')
     content.play()
   })
   videoGrid.append(content)
